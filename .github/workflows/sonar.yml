@@ -40,7 +40,7 @@ jobs:
         run: |
           sonar-scanner \
             -Dsonar.projectKey=ShiroiHyun_StudAIApp \
-            -Dsonar.organization=ShiroiHyun \
+            -Dsonar.organization=fernando-medina \
             -Dsonar.projectName=StudAIApp \
             -Dsonar.sources=. \
             -Dsonar.host.url=https://sonarcloud.io \
