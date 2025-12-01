@@ -3,7 +3,7 @@ name: SonarQube Analysis
 on:
   push:
     branches:
-      - main  # O cualquier otra rama principal que uses
+      - main
   pull_request:
     branches:
       - main
@@ -12,29 +12,34 @@ jobs:
   sonarqube:
     name: SonarQube Analysis
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Set up JDK 11
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
         java-version: '11'
 
-    - name: Cache SonarQube dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.sonar/cache
-        key: ${{ runner.os }}-sonar-${{ hashFiles('**/sonar-project.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-sonar-
+    - name: Install SonarScanner
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y unzip
+        wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+        unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+        mv sonar-scanner-5.0.1.3006-linux sonar-scanner
+        echo "${{ github.workspace }}/sonar-scanner/bin" >> $GITHUB_PATH
 
     - name: Run SonarQube Scanner
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Usa el token de SonarQube como variable de entorno
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        # Ejecutar sonar-scanner usando el token de SonarQube de manera segura
-        sonar-scanner -Dsonar.projectKey=InclusiveAI \
-                       -Dsonar.projectName=InclusiveAI \
-                       -Dsonar.host.url=http://localhost:9000 \
-                       -Dsonar.login=$SONAR_TOKEN  # Usar la variable de entorno
+        sonar-scanner \
+          -Dsonar.projectKey=InclusiveAI \
+          -Dsonar.projectName=InclusiveAI \
+          -Dsonar.sources=. \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.login=$SONAR_TOKEN
