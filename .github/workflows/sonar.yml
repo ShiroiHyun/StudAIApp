@@ -1,0 +1,40 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches:
+      - main  # O cualquier otra rama principal que uses
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  sonarqube:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: '11'
+
+    - name: Cache SonarQube dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar-${{ hashFiles('**/sonar-project.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-sonar-
+
+    - name: Run SonarQube Scanner
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Usa el token de SonarQube como variable de entorno
+      run: |
+        # Ejecutar sonar-scanner usando el token de SonarQube de manera segura
+        sonar-scanner -Dsonar.projectKey=InclusiveAI \
+                       -Dsonar.projectName=InclusiveAI \
+                       -Dsonar.host.url=http://localhost:9000 \
+                       -Dsonar.login=$SONAR_TOKEN  # Usar la variable de entorno
