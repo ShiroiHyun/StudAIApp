@@ -42,5 +42,5 @@ jobs:
           -Dsonar.projectKey=InclusiveAI \
           -Dsonar.projectName=InclusiveAI \
           -Dsonar.sources=. \
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
           -Dsonar.login=$SONAR_TOKEN
