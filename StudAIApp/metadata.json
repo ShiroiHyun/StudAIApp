@@ -1,0 +1,8 @@
+{
+  "name": "Inclusive StudAI Platform",
+  "description": "Herramienta de adaptación de contenidos académicos: Lector inteligente (OCR+TTS) y Subtitulado Automático (STT) para estudiantes.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
