@@ -1,0 +1,8 @@
+{
+  "name": "Inclusive StudAI UCV",
+  "description": "Aplicación de accesibilidad académica para estudiantes con discapacidad visual, con arquitectura MVC e integración de IA.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
